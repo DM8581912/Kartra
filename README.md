@@ -54,6 +54,37 @@ Each feature directory represents a core module of the Kartra platform and inclu
    pytest
    ```
 
+## n8n Integration
+Kartra can use [n8n](https://n8n.io) for external workflow automation.
+
+### Deploy an n8n Instance
+Run a local instance with Docker:
+```bash
+docker run -it --rm -p 5678:5678 n8nio/n8n
+```
+Alternatively, sign up for the hosted n8n Cloud service.
+
+### Obtain an API Key
+In the n8n dashboard navigate to **Settings → API**, enable the API and copy the generated key.
+
+### Configure Environment Variables
+Point the app to your n8n server by setting the following variables:
+```bash
+export N8N_BASE_URL=http://localhost:5678
+export N8N_API_KEY=your-api-key
+export N8N_EXAMPLE_WORKFLOW_ID=<workflow-id>
+```
+Define additional variables for any other workflow IDs your application triggers.
+
+### Trigger Workflows
+Use the helper in `src/integrations/n8n_client.py`:
+```python
+from src.integrations import n8n_client
+
+n8n_client.trigger_workflow(N8N_EXAMPLE_WORKFLOW_ID, {"foo": "bar"})
+```
+The `requests` dependency required for this integration has been added to `requirements.txt`.
+
 ## Contributing
 1. Fork the repository and create your branch from `main`.
 2. Make changes and add tests where applicable.
